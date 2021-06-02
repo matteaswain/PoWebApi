@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31321.278
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PoWebApi", "PoWebApi\PoWebApi.csproj", "{410BEA39-4C5C-4692-9E78-2388478CCDCC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{410BEA39-4C5C-4692-9E78-2388478CCDCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{410BEA39-4C5C-4692-9E78-2388478CCDCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{410BEA39-4C5C-4692-9E78-2388478CCDCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{410BEA39-4C5C-4692-9E78-2388478CCDCC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {069F0EA4-00EB-4A7D-B842-E0BB78F7FC19}
+	EndGlobalSection
+EndGlobal
