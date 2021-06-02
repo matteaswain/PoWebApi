@@ -113,5 +113,21 @@ namespace PoWebApi.Controllers
         {
             return _context.Employee.Any(e => e.Id == id);
         }
+// http parameters must match your methods parameter
+// GET: api/Employees/mimi/password
+        [HttpGet("{login}/{password}")]
+        public async Task<ActionResult<Employee>> Login(string login, string password)
+        {
+            var empl = await _context.Employee
+                .SingleOrDefaultAsync(e => e.Login == login && e.Password == password);
+// if employee does not exist
+            if(empl == null)
+            {
+                return NotFound();
+            }
+// if employee does exist, returns Ok
+            return Ok(empl);
+
+        }
     }
 }
