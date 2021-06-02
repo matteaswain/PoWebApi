@@ -32,7 +32,7 @@ namespace PoWebApi.Controllers
         //ActionResult is a generic class and can return multiple used mostly for errors. EX: "Iteam not found"
         public async Task<ActionResult<IEnumerable<Employee>>> GetEmployee()
         {
-            return await _context.Employee.ToListAsync();
+            return await _context.Employee.ToListAsync();  // creating a list of all employees
         }
 
         // GET: api/Employees/5

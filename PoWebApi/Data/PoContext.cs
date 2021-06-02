@@ -14,6 +14,13 @@ namespace PoWebApi.Data
         {
         }
 
-        public DbSet<PoWebApi.Models.Employee> Employee { get; set; }
+        public DbSet<Employee> Employee { get; set; }
+
+
+// This sets our Login as unique
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<Employee>(e => { e.HasIndex(p => p.Login).IsUnique(); });
+        }
     }
 }
