@@ -25,6 +25,16 @@ namespace PoWebApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PurchaseOrder>>> GetPurchaseOrders()
         {
+            return await _context.PurchaseOrders 
+           .ToListAsync();
+        }
+
+// Method will return employee instance
+
+        // GET: api/PurchaseOrders/empl
+        [HttpGet("empl")]
+        public async Task<ActionResult<IEnumerable<PurchaseOrder>>> GetPurchaseOrdersEmployee()
+        {
             return await _context.PurchaseOrders
           .Include(e => e.employee) //  reads the entire instance of your employee and brings back with purchase order 
           .ToListAsync();
@@ -33,6 +43,35 @@ namespace PoWebApi.Controllers
         // GET: api/PurchaseOrders/5
         [HttpGet("{id}")]
         public async Task<ActionResult<PurchaseOrder>> GetPurchaseOrder(int id)
+        {
+            var purchaseOrder = await _context.PurchaseOrders.FindAsync(id);
+                
+
+            if (purchaseOrder == null)
+            {
+                return NotFound();
+            }
+
+            return purchaseOrder;
+        }
+
+
+        [HttpGet("reviews")]
+
+        public async Task<ActionResult<IEnumerable<PurchaseOrder>>> GetReviewForAdmin()
+        {
+            return await _context.PurchaseOrders
+                .Where(p => p.Status == PurchaseOrder.StatusReview)
+                .Include(p => p.employee)
+                .ToListAsync();           
+        }
+
+
+// Method will retun employee instance
+
+        // GET: api/PurchaseOrders/5/empl
+        [HttpGet("{id}/empl")]
+        public async Task<ActionResult<PurchaseOrder>> GetPurchaseOrderEmployee(int id)
         {
             var purchaseOrder = await _context.PurchaseOrders
                 .Include(e => e.employee) // brings back the instance of your employee with read request
@@ -45,6 +84,85 @@ namespace PoWebApi.Controllers
 
             return purchaseOrder;
         }
+
+        [HttpPut("{id}/edit")]
+
+        public async Task<IActionResult> UpdateStatusToEdit(int id)
+        {
+            var purchaseOrder = await _context.PurchaseOrders.FindAsync(id);
+
+            if(purchaseOrder == null)
+            {
+                return NotFound();
+            }
+
+            purchaseOrder.Status = "EDIT";
+
+            return await PutPurchaseOrder(id, purchaseOrder);
+        }
+
+
+        [HttpPut("{id}/review")]
+
+        public async Task<IActionResult> POReviewOrApproved(int id)
+        {
+
+            var purchaseOrder = await _context.PurchaseOrders.FindAsync(id);
+
+            if(purchaseOrder == null)
+            {
+                return NotFound();
+            }
+
+            if(purchaseOrder.Total == 0)
+            {
+                return BadRequest();
+            }
+
+            purchaseOrder.Status = (purchaseOrder.Total > 0 && purchaseOrder.Total <= 100) ? "APPROVED" : "REVIEW";
+
+            return await PutPurchaseOrder(id, purchaseOrder);
+        }
+
+        [HttpPut("{id}/rejected")]
+
+        public async Task<IActionResult> RejectPO(int id)
+        {
+            var purchaseOrder = await _context.PurchaseOrders.FindAsync(id);
+
+            if(purchaseOrder == null)
+            {
+                return NotFound();
+
+            }
+
+            if(purchaseOrder.Total > 100)
+            {
+                purchaseOrder.Status = "REJECTED";
+            }               
+                return await PutPurchaseOrder(id, purchaseOrder);
+        }
+
+        [HttpPut("{id}/approved")]
+
+        public async Task<IActionResult> ApprovePO(int id)
+        {
+            var purchaseOrder = await _context.PurchaseOrders.FindAsync(id);
+
+            if (purchaseOrder == null)
+            {
+                return NotFound();
+
+            }
+
+            if (purchaseOrder.Total <= 100)
+            {
+                purchaseOrder.Status = "APPROVED";
+            }
+            return await PutPurchaseOrder(id, purchaseOrder);
+        }
+
+
 
         // PUT: api/PurchaseOrders/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for

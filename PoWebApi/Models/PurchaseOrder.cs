@@ -9,13 +9,19 @@ namespace PoWebApi.Models
 {
     public class PurchaseOrder
     {
+        public static string StatusNew = "NEW";
+        public static string StatusEdit = "EDIT";
+        public static string StatusReview = "REVIEW";
+        public static string StatusApproved = "APPROVED";
+        public static string StatusRejected = "REJECTED";
+
         public int Id { get; set; }
 
         [Required, StringLength(80)]
         public string Description { get; set; }
 
         [Required, StringLength(20)]
-        public string Status { get; set; } = "NEW";
+        public string Status { get; set; } = PurchaseOrder.StatusNew;
 // how to set up decimal types
         [Required, Column(TypeName = "decimal(9,2)")]
         public decimal Total { get; set; } = 0.00m;
