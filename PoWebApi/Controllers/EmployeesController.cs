@@ -34,10 +34,11 @@ namespace PoWebApi.Controllers
         {
             return await _context.Employee.ToListAsync();  // creating a list of all employees
         }
+//
 
         // GET: api/Employees/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Employee>> GetEmployee(int id)
+        [HttpGet("{id}")] // id is a route variables but doesnt declare a type 
+        public async Task<ActionResult<Employee>> GetEmployee(int id)// this id must match route variable id
         {
             var employee = await _context.Employee.FindAsync(id);
 
@@ -46,7 +47,7 @@ namespace PoWebApi.Controllers
                 return NotFound();
             }
 
-            return employee;
+            return employee; // returns just the data 
         }
 
         // PUT: api/Employees/5
@@ -59,7 +60,7 @@ namespace PoWebApi.Controllers
             {
                 return BadRequest();
             }
-
+// keeps track of modification history of cached data in entityframework// allows for update 
             _context.Entry(employee).State = EntityState.Modified;
 
             try
@@ -88,8 +89,9 @@ namespace PoWebApi.Controllers
         public async Task<ActionResult<Employee>> PostEmployee(Employee employee)
         {
             _context.Employee.Add(employee);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(); // await is needed for async 
 
+// return function CreateAtAction( reads the database and returns the created employee with generated id value 
             return CreatedAtAction("GetEmployee", new { id = employee.Id }, employee);
         }
 
@@ -113,10 +115,12 @@ namespace PoWebApi.Controllers
         {
             return _context.Employee.Any(e => e.Id == id);
         }
+
+
 // http parameters must match your methods parameter
 // GET: api/Employees/mimi/password
-        [HttpGet("{login}/{password}")]
-        public async Task<ActionResult<Employee>> Login(string login, string password)
+        [HttpGet("{login}/{password}")] // route variables 
+        public async Task<ActionResult<Employee>> Login(string login, string password)// type and vars that match route vars
         {
             var empl = await _context.Employee
                 .SingleOrDefaultAsync(e => e.Login == login && e.Password == password);
