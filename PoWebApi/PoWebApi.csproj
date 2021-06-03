@@ -5,6 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20210603153130_Init PO table.cs" />
+    <Compile Remove="Migrations\20210603153130_Init PO table.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="microsoft.entityframeworkcore.sqlserver" Version="3.1.15" />
     <PackageReference Include="microsoft.entityframeworkcore.tools" Version="3.1.15">
       <PrivateAssets>all</PrivateAssets>

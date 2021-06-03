@@ -16,6 +16,8 @@ namespace PoWebApi.Data
 
         public DbSet<Employee> Employee { get; set; }
 
+        public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
+
 
 // This sets our Login as unique
         protected override void OnModelCreating(ModelBuilder builder)
