@@ -20,6 +20,8 @@ namespace PoWebApi.Data
 
         public DbSet<Item> Items { get; set; }
 
+        public DbSet<PoLine> PoLines { get; set; }
+
 // This sets our Login as unique
         protected override void OnModelCreating(ModelBuilder builder)
         {
