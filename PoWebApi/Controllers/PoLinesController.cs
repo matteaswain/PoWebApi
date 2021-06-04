@@ -16,6 +16,27 @@ namespace PoWebApi.Controllers
     {
         private readonly PoContext _context;
 
+        private async Task RecalculatePoTotal(int poid)
+        { 
+            var po = await _context.PurchaseOrders.FindAsync(poid);
+// checks to ensure po id passed in is a vaild id 
+            if (po == null) throw new Exception("FATAL: Po is not found to recalculate!");
+
+            var grandtotal = (from l in _context.PoLines // selects poline table
+                    join i in _context.Items // joins item table
+                    on l.ItemId equals i.Id // foreign keys 
+                    where l.PurchaseOrderId == poid // selecting the poid that was passed through url
+                    select new {LineTotal = l.Quantity * i.Price })
+                    .Sum(x => x.LineTotal);
+      //select new // creating a new column Linetotal that is quantity times item price. 
+      //Wrap in () to ensure it processes first then .Sum is added to calculate the grand total 
+
+
+            po.Total = grandtotal;
+            await _context.SaveChangesAsync();          
+
+        }
+
         public PoLinesController(PoContext context)
         {
             _context = context;
@@ -58,6 +79,7 @@ namespace PoWebApi.Controllers
             try
             {
                 await _context.SaveChangesAsync();
+                await RecalculatePoTotal(poLine.PurchaseOrderId); // recalculates total /ADDED
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -81,6 +103,7 @@ namespace PoWebApi.Controllers
         public async Task<ActionResult<PoLine>> PostPoLine(PoLine poLine)
         {
             _context.PoLines.Add(poLine);
+            await RecalculatePoTotal(poLine.PurchaseOrderId);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetPoLine", new { id = poLine.Id }, poLine);
@@ -97,6 +120,7 @@ namespace PoWebApi.Controllers
             }
 
             _context.PoLines.Remove(poLine);
+            await RecalculatePoTotal(poLine.PurchaseOrderId);
             await _context.SaveChangesAsync();
 
             return poLine;
